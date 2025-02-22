@@ -1,0 +1,29 @@
+<!-- app.component.html -->
+
+<div class="flex flex-col gap-4 p-4">
+    <h2>Select Cryptocurrencies to Display on the Chart</h2>
+    
+    <div class="grid grid-cols-7 gap-4">
+        <div *ngFor="let crypto of cryptos">
+            <p-checkbox 
+            [value]="crypto.id" 
+            [(ngModel)]="selectedCryptos[crypto.id]" 
+            [binary]="true" 
+            label="{{crypto.name}}"
+            (onChange)="onCheckboxChange()">
+          </p-checkbox>
+        </div>
+      </div>
+      <h2>Select Type of Chart</h2>
+    <p-dropdown 
+    [options]="chartTypes" 
+    [(ngModel)]="selectedChartType" 
+    (onChange)="onChartTypeChange()" 
+    placeholder="Select Chart Type">
+  </p-dropdown>
+  
+    <p-button label="Show Chart" (click)="updateChart()"></p-button>
+    
+    <div echarts [options]="chartOptions" class="w-full h-96"></div>  <!-- ECharts Chart -->
+  </div>
+  
