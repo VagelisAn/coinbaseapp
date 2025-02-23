@@ -17,6 +17,9 @@ import { ChartComponent } from './components/crypto/chart/chart.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { LayoutModules } from './components/layout/layout.module';
 import { MessageService } from 'primeng/api';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MaterialModule } from './material.module';
+import { MaterialComponent } from './components/crypto/table/material/material.component';
 
 
 
@@ -28,6 +31,7 @@ import { MessageService } from 'primeng/api';
         AppComponent,
         ListComponent,
         ChartComponent,
+        MaterialComponent
     ],
     bootstrap: [AppComponent], 
     exports: [ ],
@@ -38,6 +42,7 @@ import { MessageService } from 'primeng/api';
         ReactiveFormsModule,
         FormsModule,
         PrimeNgModule,
+        MaterialModule,
         LayoutModules,
         StoreModule.forRoot({crypto: cryptoReducer }),
         EffectsModule.forRoot([CryptoEffects]),
@@ -48,6 +53,7 @@ import { MessageService } from 'primeng/api';
       ], 
       providers: [
         provideHttpClient(withInterceptorsFromDi()),
-        MessageService
+        MessageService,
+        provideAnimationsAsync()
     ] })
 export class AppModule { }

@@ -2,25 +2,26 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
+import { Crypto } from 'src/app/models/crypto.model';
 import { loadAllCryptos, loadCryptos } from 'src/app/store/crypto.actions';
-import { selectCryptoError, selectCryptos } from 'src/app/store/crypto.selectors';
+import {
+  selectCryptoError,
+  selectCryptos,
+} from 'src/app/store/crypto.selectors';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+  styleUrl: './list.component.css',
 })
 export class ListComponent implements OnInit, OnDestroy {
   cryptos!: Crypto[];
   isLoading = true;
   subscriptionCryptos!: Subscription;
   subscriptionError!: Subscription;
-  
-  constructor(
-    private store: Store,
-    private messageService: MessageService
-  ) {}
-  
+
+  constructor(private store: Store, private messageService: MessageService) {}
+
   ngOnInit() {
     // this.initDispatcher();
     this.initSelectors();
@@ -35,12 +36,11 @@ export class ListComponent implements OnInit, OnDestroy {
     }
   }
 
-  
   // initDispatcher() {
   //   this.store.dispatch(loadAllCryptos());
   // }
 
-  initSelectors(){
+  initSelectors() {
     this.subscriptionCryptos = this.store.select(selectCryptos).subscribe({
       next: (crypto) => {
         if (crypto) {
@@ -48,13 +48,14 @@ export class ListComponent implements OnInit, OnDestroy {
             severity: 'success',
             summary: 'Success Message',
             detail: 'Your data was loaded successfully.',
-            life: 3000
+            life: 3000,
           });
           this.cryptos = [...crypto];
-          this.isLoading = false;        }
+          this.isLoading = false;
+        }
       },
-    });;
-    // can use instead of manual handle observable can use the follow to make auto handle 
+    });
+    // can use instead of manual handle observable can use the follow to make auto handle
     // this.cryptos$ = this.store.select('cryptos').pipe(
     //   map((data) => [...data]) // Create a new array for sorting
     // );
@@ -62,15 +63,14 @@ export class ListComponent implements OnInit, OnDestroy {
     this.subscriptionError = this.store.select(selectCryptoError).subscribe({
       next: (message) => {
         if (message) {
-         this.isLoading = false;
-         this.messageService.add({
-          severity: 'error',
-          summary: 'Error Message',
-          detail: 'Something went wrong. Please try again.',
-        });
+          this.isLoading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error Message',
+            detail: 'Something went wrong. Please try again.',
+          });
         }
       },
-    });;
-  }  
-    
+    });
+  }
 }
