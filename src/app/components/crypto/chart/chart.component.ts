@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, util } from 'echarts';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { Crypto } from 'src/app/models/crypto.model';
@@ -8,6 +8,7 @@ import {
   selectCryptoError,
   selectCryptos,
 } from 'src/app/store/crypto.selectors';
+import { PdfUtil } from 'src/app/utils/pdfUtil';
 
 @Component({
   selector: 'app-chart',
@@ -18,7 +19,6 @@ export class ChartComponent implements OnInit, OnDestroy {
   cryptos!: Crypto[];
   showCryptos!: Crypto[];
 
-  // selectedCryptos: { [key: string]: boolean } = {};
   selectedCryptos: Set<string> = new Set();
   selectedChartType: string = 'line';
 
@@ -28,10 +28,12 @@ export class ChartComponent implements OnInit, OnDestroy {
   chartOptions: EChartsOption = {};
 
   chartTypes = [
-    { label: 'Line Chart', value: 'line' },
+    { label: 'Pie Chart', value: 'pie' },
     { label: 'Bar Chart', value: 'bar' },
-    { label: 'Pie Chart', value: 'pie' }
+    { label: 'Line Chart', value: 'line' }
   ];
+
+  pdfHeaders = ['Name', 'Symbol', 'Price (USD)', 'Market Cap (USD)'];
 
   constructor(private store: Store, private messageService: MessageService) {}
 
@@ -82,12 +84,7 @@ export class ChartComponent implements OnInit, OnDestroy {
       return;
     }
    
-    this.showCryptos = [];
-
-    this.selectedCryptos.forEach((crypt) => {
-      const filteredCryptos = this.cryptos.filter((c) => c.id === crypt);
-      this.showCryptos.push(...filteredCryptos);
-    });
+    this.showCryptos = this.exportSelectedCryptos(this.selectedCryptos);
    
     if (this.selectedChartType === 'line') {
       this.chartOptions = {
@@ -232,5 +229,26 @@ export class ChartComponent implements OnInit, OnDestroy {
       summary: summary,
       detail: detail,
     });
+  }
+
+  exportPdf() {
+    const data = this.exportSelectedCryptos(this.selectedCryptos).map(crypto => [
+      crypto.name,
+      crypto.symbol,
+      crypto.current_price.toFixed(2),
+      crypto.market_cap.toLocaleString()
+    ]);
+   PdfUtil.exportToPdf("Exprot data for Crypto", this.pdfHeaders, data, "Export.pdf")
+  }
+
+
+  exportSelectedCryptos(selectedCryptos: Set<string>):Crypto[] {
+    this.showCryptos = [];
+
+    this.selectedCryptos.forEach((crypt) => {
+      const filteredCryptos = this.cryptos.filter((c) => c.id === crypt);
+      this.showCryptos.push(...filteredCryptos);
+    });
+    return  this.showCryptos;
   }
 }

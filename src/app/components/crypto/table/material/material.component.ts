@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store, select } from '@ngrx/store';
 import { Observable, tap } from 'rxjs';
 import { Crypto } from 'src/app/models/crypto.model';
 import {
-  loadAllCryptos,
   setPage,
   setSearchTerm,
 } from 'src/app/store/crypto.actions';
@@ -29,10 +27,15 @@ export class MaterialComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   
   displayedColumns: string[] = [
+    'id',
     'name',
     'symbol',
     'current_price',
     'market_cap',
+    'total_volume',
+    'high_24h',
+    'low_24h',
+    'price_change_percentage_24h'
   ];
   dataSource = new MatTableDataSource<Crypto>([]);
 

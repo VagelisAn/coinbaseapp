@@ -20,6 +20,7 @@ import { MessageService } from 'primeng/api';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MaterialModule } from './material.module';
 import { MaterialComponent } from './components/crypto/table/material/material.component';
+import { ColorTextPipe } from './pipes/colorTextPipe';
 
 
 
@@ -31,7 +32,8 @@ import { MaterialComponent } from './components/crypto/table/material/material.c
         AppComponent,
         ListComponent,
         ChartComponent,
-        MaterialComponent
+        MaterialComponent,
+        ColorTextPipe
     ],
     bootstrap: [AppComponent], 
     exports: [ ],

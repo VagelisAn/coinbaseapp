@@ -3,6 +3,11 @@
 
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event.active)">
 
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('id')"> Id </th>
+      <td mat-cell *matCellDef="let crypto">{{ crypto.id }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('name')"> Name </th>
       <td mat-cell *matCellDef="let crypto">{{ crypto.name }}</td>
@@ -15,12 +20,32 @@
 
     <ng-container matColumnDef="current_price">
       <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('current_price')"> Price </th>
-      <td mat-cell *matCellDef="let crypto">{{ crypto.current_price | currency }}</td>
+      <td mat-cell *matCellDef="let crypto" [innerHTML]="crypto.current_price | colorText"></td>
     </ng-container>
 
     <ng-container matColumnDef="market_cap">
       <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('market_cap')"> Market Cap </th>
       <td mat-cell *matCellDef="let crypto">{{ crypto.market_cap | currency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="total_volume">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('total_volume')"> Total Volume </th>
+      <td mat-cell *matCellDef="let crypto">{{ crypto.total_volume | currency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="high_24h">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('high_24h')"> High 24h </th>
+      <td mat-cell *matCellDef="let crypto">{{ crypto.high_24h | currency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="low_24h">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('low_24h')"> Low 24h </th>
+      <td mat-cell *matCellDef="let crypto">{{ crypto.low_24h | currency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price_change_percentage_24h">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortData('price_change_percentage_24h')"> price change percentage 24h </th>
+      <td mat-cell *matCellDef="let crypto">{{ crypto.price_change_percentage_24h | currency }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

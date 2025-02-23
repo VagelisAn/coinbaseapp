@@ -22,6 +22,8 @@
   </p-dropdown>
   
     <p-button label="Show Chart" (click)="updateChart()"></p-button>
+
+    <p-button label="📄 Export to PDF" icon="pi pi-file-pdf" (onClick)="exportPdf()" class="p-button-raised p-button-primary"></p-button>
     
     <div echarts [options]="chartOptions" class="w-full h-96"></div>  <!-- ECharts Chart -->
   </div>
