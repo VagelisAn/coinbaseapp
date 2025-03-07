@@ -1,16 +1,12 @@
-#version: '3.8'
-
 services:
   postgres:
     image: postgres:15
-    container_name: postgres
+    container_name: postgres-keycloack
     restart: always
     ports:
       - "5432:5432"
     volumes:
-#      - ./db-init-scripts:/docker-entrypoint-initdb.d
-      - C:/Users/Vagelis/Desktop/postgresql_data:/var/lib/postgresql/data
-#      - C:/Users/Vagelis/Documents/postgresql_data/test:/var/lib/postgresql/data
+      - C:/Users/Vagelis/Desktop/coinbase-app/postgresql_data:/var/lib/postgresql/data
     env_file:
       - .env.postgresql
     healthcheck:
@@ -18,10 +14,9 @@ services:
       interval: 10s
       retries: 5
       start_period: 30s
-
-  keycloak_web:
+  keycloak:
     image: quay.io/keycloak/keycloak:latest
-    container_name: app_keycloak
+    container_name: coinbase-keycloak
     command: [ "start-dev", "--import-realm" ]
     env_file:
       - .env.keycloak
@@ -31,28 +26,51 @@ services:
       - postgres
     ports:
       - 8080:8080
-
   db:
     image: postgres:15
-    container_name: vet-db
+    container_name: coinbase-db
     restart: always
     ports:
       - "5433:5432"
     env_file:
       - .env.postgresql.app.db
     volumes:
-      - ./init-scripts:/docker-entrypoint-initdb.d
-      - C:/Users/Vagelis/Desktop/app-db:/var/lib/postgresql/data
+      #      - ./init-scripts:/docker-entrypoint-initdb.d
+      - C:/Users/Vagelis/Desktop/coinbase-app/coinbase-db:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
       interval: 10s
       retries: 5
       start_period: 30s
+  graphite:
+    image: graphiteapp/graphite-statsd:latest
+    container_name: graphite
+    ports:
+      - "8083:80"  # For the Graphite web UI
+      - "2003:2003"  # For Graphite's plaintext protocol (used to send metrics)
+      - "8125:8125/udp"  # For StatsD (optional, if you want to send metrics via StatsD)
+    volumes:
+      - C:/Users/Vagelis/Desktop/coinbase-app/graphite-data:/opt/graphite/storage
+    environment:
+      - GRAPHITE_STORAGE_DIR=/opt/graphite/storage
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Grafana UI
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - C:/Users/Vagelis/Desktop/coinbase-app/grafana-data:/var/lib/grafana
+    depends_on:
+      - graphite
 
-volumes:
-  postgres_data:
-  pgadmin-data:
-  db:
+#volumes:
+#  postgres_data:
+#  pgadmin-data:
+#  db:
+#  grafana-data:
 
-
-# #if page not log in not fund say try ths   http://localhost:8080/admin/master/console/
+# docker-compose down
+# docker-compose up -d
