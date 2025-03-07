@@ -1,0 +1,21 @@
+------ Δημιουργία Νέου Χρήστη
+--  CREATE USER vetuser WITH PASSWORD 'root';
+--
+--  -- Δημιουργία Νέας Βάσης
+--  CREATE DATABASE vetdb;
+--
+--  -- Ανάθεση Δικαιωμάτων στον Χρήστη στη Βάση
+--  GRANT ALL PRIVILEGES ON DATABASE vetdb TO vetuser;
+--
+--  -- Δώσε δικαιώματα για όλες τις βάσεις
+--  ALTER USER vetuser CREATEDB CREATEROLE SUPERUSER;
+--
+--  -- Ανανεώστε όλα τα δικαιώματα στον χρήστη για όλες τις βάσεις
+--  GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO vetuser;
+--  GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO vetuser;
+--  GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO vetuser;
+--
+--  -- Ενεργοποίηση Δικαιωμάτων για Νέα Αντικείμενα
+--  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO vetuser;
+--  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO vetuser;
+--  ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO vetuser;
