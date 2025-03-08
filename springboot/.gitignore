@@ -31,3 +31,4 @@ build/
 Pets/
 ### VS Code ###
 .vscode/
+../angular/node_module/

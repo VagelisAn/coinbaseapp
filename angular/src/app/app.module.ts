@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { APP_INITIALIZER, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,9 +21,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MaterialModule } from './material.module';
 import { MaterialComponent } from './components/crypto/table/material/material.component';
 import { ColorTextPipe } from './pipes/colorTextPipe';
+import { AuthService } from './services/keycloak/auth.service';
+import { KeycloakAngularModule } from 'keycloak-angular';
 
-
-
+export function keycloakInitializer(authService: AuthService) {
+  return () => authService.init();
+}
 
 
 
@@ -44,6 +47,7 @@ import { ColorTextPipe } from './pipes/colorTextPipe';
         ReactiveFormsModule,
         FormsModule,
         PrimeNgModule,
+        KeycloakAngularModule,
         MaterialModule,
         LayoutModules,
         StoreModule.forRoot({crypto: cryptoReducer }),
@@ -56,6 +60,13 @@ import { ColorTextPipe } from './pipes/colorTextPipe';
       providers: [
         provideHttpClient(withInterceptorsFromDi()),
         MessageService,
-        provideAnimationsAsync()
+        provideAnimationsAsync(),
+        AuthService,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: keycloakInitializer,
+          deps: [AuthService],
+          multi: true,
+        },
     ] })
 export class AppModule { }
