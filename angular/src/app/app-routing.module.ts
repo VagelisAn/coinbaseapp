@@ -5,9 +5,10 @@ import { ChartComponent } from './components/crypto/chart/chart.component';
 import { ListComponent } from './components/crypto/list/list.component';
 import { CryptoResolver } from './resolvers/crypto.resolver';
 import { MaterialComponent } from './components/crypto/table/material/material.component';
+import { RegisterComponent } from './components/layout/register/register.component';
 
 const routes: Routes = [
-{ path: 'home', component: HomeComponent,  
+{ path: 'home', component: RegisterComponent,  
   resolve: {
   cryptos: CryptoResolver, 
           }

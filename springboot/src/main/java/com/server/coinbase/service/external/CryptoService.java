@@ -1,5 +1,7 @@
 package com.server.coinbase.service.external;
 
+import java.util.Map;
+
 public interface CryptoService {
-    String getCryptoPrice(String currency);
+    String getCoinbaseData(String endpoint, Map<String, String> params);
 }

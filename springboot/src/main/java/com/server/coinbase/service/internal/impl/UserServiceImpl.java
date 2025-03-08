@@ -1,12 +1,15 @@
 package com.server.coinbase.service.internal.impl;
 
 
+import com.server.coinbase.dto.UserCreationResponseDTO;
 import com.server.coinbase.dto.UserDTO;
 import com.server.coinbase.entity.User;
 import com.server.coinbase.exception.keycloak.KeycloakStatusMessageMapper;
+import com.server.coinbase.exception.keycloak.KeycloakUserException;
 import com.server.coinbase.mapper.UserMapper;
 import com.server.coinbase.repository.UserRepository;
 import com.server.coinbase.service.internal.UserService;
+import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +24,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final KeycloakStatusMessageMapper statusMessageMapper;
-
+    private final KeycloakUserServiceImpl keycloakUserService;
     private final UserRepository userRepository;
+
     private final UserMapper userMapper;
 
     public List<UserDTO> getAllUsers() {
@@ -38,8 +42,15 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO createUser(UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
-        return userMapper.toDto(userRepository.save(user));
+        UserCreationResponseDTO userCreationResponseDTO = keycloakUserService.createUser(userDTO);
+
+        if (userCreationResponseDTO.getStatusCode() == Response.Status.CREATED.getStatusCode()) {
+            userDTO.setKeycloakId(userCreationResponseDTO.getUserId());
+            User user = userMapper.toEntity(userDTO);
+            return userMapper.toDto(userRepository.save(user));
+        }
+        String errorMessage = statusMessageMapper.getMessageByStatus(userCreationResponseDTO.getStatusCode());
+        throw new KeycloakUserException("Failed to create user: " + errorMessage);
     }
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {

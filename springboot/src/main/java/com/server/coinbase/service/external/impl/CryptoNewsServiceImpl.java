@@ -6,31 +6,49 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.Map;
 
 @Service
 public class CryptoNewsServiceImpl implements CryptoNewsService {
 
-    public static final String CURRENCIES_PARAM = "&currencies";
     @Value("${crypto.panic.url}")
-    private String url;
+    private String apiUrl;
 
     @Value("${crypto.panic.key}")
-    private String apiKey;
+    private String apiToken;
 
-    private final Cache<String, String> cache;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final WebClient webClient;
 
-    private final String API_URL = url + apiKey + CURRENCIES_PARAM + "=BTC";
-
-    public CryptoNewsServiceImpl(Cache<String, String> cache) {
-        this.cache = cache;
+    public CryptoNewsServiceImpl(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.build();
     }
 
-    public String getCryptoNews() {
-        return cache.get("cryptoNews", key -> fetchCryptoNews());
-    }
+    @Cacheable(value = "cryptoNews", key = "#params.toString()")
+    public String getCryptoNews(Map<String, String> params) {
+        // Build the dynamic URL with query parameters
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .queryParam("auth_token", apiToken);
 
-    private String fetchCryptoNews() {
-        return restTemplate.getForObject(API_URL, String.class);
+        params.forEach((key, value) -> {
+            if (value != null && !value.isEmpty()) {
+                uriBuilder.queryParam(key, value);
+            }
+        });
+
+        URI uri = uriBuilder.build().toUri();
+
+        System.out.println("Request URL: " + uri);
+
+        // Perform the request
+        return webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block(); // Blocking call to get the result synchronously
     }
 }
+

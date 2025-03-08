@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CryptoService } from '../services/crypto.service';
+import { CryptoService } from '../services/crypto/crypto.service';
 import * as CryptoActions from './crypto.actions';
 import { catchError, map, mergeMap, of } from 'rxjs';
 
