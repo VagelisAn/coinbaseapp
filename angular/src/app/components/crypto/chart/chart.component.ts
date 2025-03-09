@@ -1,19 +1,34 @@
+import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { EChartsOption, util } from 'echarts';
-import { MessageService } from 'primeng/api';
+import { NgxEchartsModule,  provideEchartsCore} from 'ngx-echarts';
+import * as echarts from 'echarts/core';
+import { EChartsOption } from 'echarts';
+import { TitleComponent, TooltipComponent } from 'echarts/components'; 
+import { Crypto } from '../../../models/crypto.model';
+import { CryptoService } from '../../../services/crypto/crypto.service';
 import { Subscription } from 'rxjs';
-import { Crypto } from 'src/app/models/crypto.model';
-import {
-  selectCryptoError,
-  selectCryptos,
-} from 'src/app/store/crypto.selectors';
-import { PdfUtil } from 'src/app/utils/pdfUtil';
+import { PdfUtil } from '../../../utils/pdfUtil';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FormsModule } from '@angular/forms';
+import { BarChart, LineChart } from 'echarts/charts';
+import { GridComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
 
+
+echarts.use([LineChart, TooltipComponent, TitleComponent, CanvasRenderer, GridComponent, BarChart]);
+echarts.use([TooltipComponent]);
 @Component({
   selector: 'app-chart',
+  standalone: true,
+  imports: [CommonModule, FormsModule, CheckboxModule, ButtonModule, DropdownModule, NgxEchartsModule, NgFor],
+  providers: [
+    provideEchartsCore({ echarts }),
+  
+  ],
   templateUrl: './chart.component.html',
-  styleUrl: './chart.component.css',
+  styleUrl: './chart.component.css'
 })
 export class ChartComponent implements OnInit, OnDestroy {
   cryptos!: Crypto[];
@@ -22,10 +37,9 @@ export class ChartComponent implements OnInit, OnDestroy {
   selectedCryptos: Set<string> = new Set();
   selectedChartType: string = 'line';
 
-  subscriptionCryptos!: Subscription;
-  subscriptionError!: Subscription;
-
   chartOptions: EChartsOption = {};
+
+  private subscription!: Subscription; 
 
   chartTypes = [
     { label: 'Pie Chart', value: 'pie' },
@@ -35,20 +49,20 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   pdfHeaders = ['Name', 'Symbol', 'Price (USD)', 'Market Cap (USD)'];
 
-  constructor(private store: Store, private messageService: MessageService) {}
+  constructor(private cryptoService: CryptoService) {}
 
   ngOnInit(): void {
-    this.initSelectors();
-    // this.initDispatcher();
+    this.subscription = this.cryptoService.getAllCryptos().subscribe({
+      next: (data: any[]) => {
+        console.log(data)
+        this.cryptos = data; // ✅ Assign the data to the variable
+      },
+      error: (err) => console.error('Error fetching cryptos:', err),
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.subscriptionCryptos) {
-      this.subscriptionCryptos.unsubscribe();
-    }
-    if (this.subscriptionError) {
-      this.subscriptionError.unsubscribe();
-    }
+    this.subscription.unsubscribe(); // ✅ Prevent memory leaks
   }
 
   isSelected(cryptoId: string): boolean {
@@ -60,7 +74,7 @@ export class ChartComponent implements OnInit, OnDestroy {
       if (this.selectedCryptos.size >= 8) {
           return;
       } else if (this.selectedCryptos.size == 7) {
-        this.showMessage('warn','Selection Limit','You can select up to 8 cryptocurrencies. Last selection!');
+        // this.showMessage('warn','Selection Limit','You can select up to 8 cryptocurrencies. Last selection!');
         this.selectedCryptos.add(cryptoId);
       }
       else {
@@ -80,7 +94,7 @@ export class ChartComponent implements OnInit, OnDestroy {
   updateChart() {
 
     if (this.selectedCryptos.size === 0) {
-      this.showMessage('error', 'Error', 'Please select at least one cryptocurrency!');
+      // this.showMessage('error', 'Error', 'Please select at least one cryptocurrency!');
       return;
     }
    
@@ -201,35 +215,6 @@ export class ChartComponent implements OnInit, OnDestroy {
     }
   }
 
-  // initDispatcher() {
-  //     this.store.dispatch(loadAllCryptos());
-  //   }
-
-  initSelectors() {
-    this.subscriptionCryptos = this.store
-      .select(selectCryptos)
-      .subscribe((data) => {
-        this.cryptos = [...data];
-        this.cryptos.sort((a, b) => a.name.localeCompare(b.name));
-        this.showMessage('success', 'Success Message' ,'Your data was loaded successfully.');
-      });
-
-    this.subscriptionError = this.store.select(selectCryptoError).subscribe({
-      next: (message) => {
-        if (message) {
-          this.showMessage('error', 'Error Message' ,'Something went wrong. Please try again.');
-        }
-      },
-    });
-  }
-
-  showMessage(severity: string, summary: string, detail: string) {
-    this.messageService.add({
-      severity: severity,
-      summary: summary,
-      detail: detail,
-    });
-  }
 
   exportPdf() {
     const data = this.exportSelectedCryptos(this.selectedCryptos).map(crypto => [

@@ -3,12 +3,12 @@
     
     <div class="grid grid-cols-7 gap-4">
         <div *ngFor="let crypto of cryptos">
+          {{crypto.name}}
             <p-checkbox 
             [value]="crypto.id" 
             [ngModel]="isSelected(crypto.id)" 
             [binary]="true"
             [disabled]="!isSelected(crypto.id) && selectedCryptos.size >= 8"
-            label="{{crypto.name}}"
             (onChange)="onCheckboxChange($event, crypto.id)">
           </p-checkbox>
         </div>

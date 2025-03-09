@@ -1,0 +1,16 @@
+<p-menubar [model]="menuItems">
+    <ng-template pTemplate="start">
+      <span *ngIf="username">Welcome, {{ username }}</span>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <button *ngIf="isAuthenticated" pButton label="Logout" icon="pi pi-sign-out" (click)="logout()"></button>
+    </ng-template>
+  </p-menubar>
+
+  <p-sidebar [(visible)]="menuVisible">
+    <p-panelMenu [model]="sideMenu"></p-panelMenu>
+  </p-sidebar>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>

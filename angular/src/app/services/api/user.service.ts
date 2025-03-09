@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/models/user.model';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from '../../../environments/environment';
+import { User } from '../../models/user.model';
 
 const baseUrl = `${environment.baseURL}/api/users`; 
 
