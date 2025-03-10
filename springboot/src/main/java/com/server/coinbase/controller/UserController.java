@@ -27,6 +27,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
+    @GetMapping("/keycloak/{id}")
+    public ResponseEntity<UserDTO> getUserByKeycloakId(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getUserByKeycloakId(id));
+    }
+
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.createUser(userDTO));

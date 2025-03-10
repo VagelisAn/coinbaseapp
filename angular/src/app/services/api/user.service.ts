@@ -18,6 +18,10 @@ export class UserService {
   get(id: number): Observable<User> { 
       return this.http.get<User>(`${baseUrl}/${id}`); 
   } 
+
+  getByKeycloakId(id: string): Observable<User> { 
+    return this.http.get<User>(`${baseUrl}/keycloak/${id}`); 
+} 
   
   create(owner: User): Observable<User> { 
       return this.http.post<User>(`${baseUrl}`, owner); 

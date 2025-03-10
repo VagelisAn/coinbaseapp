@@ -1,18 +1,18 @@
 <div class="flex flex-col gap-4 p-4">
     <h2>Select Cryptocurrencies to Display on the Chart</h2>
     
-    <div class="grid grid-cols-7 gap-4">
-        <div *ngFor="let crypto of cryptos">
-          {{crypto.name}}
-            <p-checkbox 
-            [value]="crypto.id" 
-            [ngModel]="isSelected(crypto.id)" 
-            [binary]="true"
-            [disabled]="!isSelected(crypto.id) && selectedCryptos.size >= 8"
-            (onChange)="onCheckboxChange($event, crypto.id)">
-          </p-checkbox>
-        </div>
+    <div class="crypto-grid">
+      <div *ngFor="let crypto of cryptos" class="crypto-item">
+        {{crypto.name}}
+        <p-checkbox 
+          [value]="crypto.id" 
+          [ngModel]="isSelected(crypto.id)" 
+          [binary]="true"
+          [disabled]="!isSelected(crypto.id) && selectedCryptos.size >= 8"
+          (onChange)="onCheckboxChange($event, crypto.id)">
+        </p-checkbox>
       </div>
+    </div>
       <h2>Select Type of Chart</h2>
     <p-dropdown 
     [options]="chartTypes" 

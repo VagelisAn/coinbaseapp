@@ -1,0 +1,30 @@
+<p-card header="User Profile" subheader="{{ profile.firstname }} {{ profile.lastname }}">
+    <ng-template pTemplate="content">
+      <div class="p-grid p-dir-col p-align-start">
+        <div class="p-col">
+          <strong>Email:</strong> {{ profile.email }}
+        </div>
+        <div class="p-col">
+          <strong>Mobile:</strong> {{ profile.mobile }}
+        </div>
+        <div class="p-col">
+          <strong>Phone:</strong> {{ profile.phone }}
+        </div>
+        <div class="p-col" *ngIf="profile.address">
+          <strong>Address:</strong> {{ profile.address }}
+        </div>
+        <div class="p-col" *ngIf="profile.city">
+          <strong>City:</strong> {{ profile.city }}
+        </div>
+        <div class="p-col" *ngIf="profile.postcode">
+          <strong>Postcode:</strong> {{ profile.postcode }}
+        </div>
+        <div class="p-col" *ngIf="profile.contact">
+          <strong>Contact:</strong> {{ profile.contact }}
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Edit Profile" class="p-button-secondary"></button>
+    </ng-template>
+  </p-card>

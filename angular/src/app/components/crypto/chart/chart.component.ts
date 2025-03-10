@@ -12,12 +12,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
-import { BarChart, LineChart } from 'echarts/charts';
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
 import { GridComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 
 
-echarts.use([LineChart, TooltipComponent, TitleComponent, CanvasRenderer, GridComponent, BarChart]);
+echarts.use([LineChart, TooltipComponent, TitleComponent, CanvasRenderer, GridComponent, BarChart, PieChart]);
 echarts.use([TooltipComponent]);
 @Component({
   selector: 'app-chart',

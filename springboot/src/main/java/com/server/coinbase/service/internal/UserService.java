@@ -11,6 +11,8 @@ public interface UserService {
 
     public UserDTO getUserById(Long id);
 
+    public UserDTO getUserByKeycloakId(String id);
+
     public UserDTO createUser(UserDTO userDTO);
 
     public UserDTO updateUser(Long id, UserDTO userDTO);

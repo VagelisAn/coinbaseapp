@@ -33,6 +33,7 @@ export class LayoutComponent {
 
   getUserMenu(): MenuItem[] {
     const roles = this.keycloakService.getClientRoles();
+    console.log("Aut ", this.isAuthenticated);
     console.log("Roles ", roles)
     if (roles.includes('admin')) {
       return [
@@ -41,8 +42,9 @@ export class LayoutComponent {
       ];
     } else {
       return [
-        { label: 'Profile', icon: 'pi pi-user', routerLink: ['/profile'] },
-        { label: 'Settings', icon: 'pi pi-cog', routerLink: ['/settings'] }
+        { label: 'Chart', icon: 'pi pi-user', routerLink: ['/chart'] },
+        { label: 'List', icon: 'pi pi-cog', routerLink: ['/list'] },
+        { label: 'Profile', icon: 'pi pi-user', routerLink: ['/profile'] }
       ];
     }
   }

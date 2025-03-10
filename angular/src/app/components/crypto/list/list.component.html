@@ -8,8 +8,9 @@ currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
 sortField="lastname" [sortOrder]="1" emptyMessage="No records found">
 <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
-        <h5 class="m-0">Totally exist {{ cryptos ? cryptos.length : 0 }} {{ cryptos.length == 1 ? ' row'
-            : 'rows' }} </h5>
+        <ng-container *ngIf="cryptos">
+            Totally exist {{ cryptos.length || 0 }} {{ (cryptos.length || 0) == 1 ? 'row' : 'rows' }}
+          </ng-container>
         <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"

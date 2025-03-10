@@ -41,6 +41,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @Override
+    public UserDTO getUserByKeycloakId(String id) {
+        User user = userRepository.findByKeycloakId(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return userMapper.toDto(user);
+    }
+
     public UserDTO createUser(UserDTO userDTO) {
         UserCreationResponseDTO userCreationResponseDTO = keycloakUserService.createUser(userDTO);
 

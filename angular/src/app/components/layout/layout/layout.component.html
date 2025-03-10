@@ -1,8 +1,6 @@
 <p-menubar [model]="menuItems">
-    <ng-template pTemplate="start">
-      <span *ngIf="username">Welcome, {{ username }}</span>
-    </ng-template>
     <ng-template pTemplate="end">
+      <span *ngIf="username">Welcome, {{ username }}</span>
       <button *ngIf="isAuthenticated" pButton label="Logout" icon="pi pi-sign-out" (click)="logout()"></button>
     </ng-template>
   </p-menubar>

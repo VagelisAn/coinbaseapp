@@ -5,8 +5,6 @@ import { KeycloakService } from '../../services/keycloak/keycloak.service';
 export const authGuard = () => {
   const keycloakService = inject(KeycloakService);
   const router = inject(Router);
-  console.log("QQ ", keycloakService.isAuthenticated())
-  console.log("!! ", keycloakService.getToken())
   if (!keycloakService.isAuthenticated()) {
     router.navigate(['/login']);
     return false;
