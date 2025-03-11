@@ -40,20 +40,20 @@ export class HeaderComponent {
     const roles = this.keycloakService.getClientRoles();
     if (roles.includes('admin')) {
       return [
-        { label: 'Admin Home', routerLink: '/admin' },
-        { label: 'Users', routerLink: '/admin-users' }
+        { label: 'Admin Home', routerLink: '/admin/page' },
+        { label: 'Users', routerLink: '/admin/users' }
       ];
     } else if (roles.includes('user')) {
       return [
         { label: 'User Home', routerLink: '/user' },
-        { label: 'Profile', routerLink: '/user-profile' },
-        { label: 'List', routerLink: '/user-list' },
-        { label: 'Chart', routerLink: '/user-chart' }
+        { label: 'Profile', routerLink: '/user/profile' },
+        { label: 'List', routerLink: '/user/list' },
+        { label: 'Chart', routerLink: '/user/chart' }
       ];
     } else {
       return [
         { label: 'Home', routerLink: '/' }
-      ];
+      ]; // ✅ Default option in case no role matches
     }
   }
 }
