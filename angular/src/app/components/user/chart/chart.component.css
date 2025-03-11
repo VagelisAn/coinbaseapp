@@ -1,0 +1,20 @@
+.chart-container {
+    width: 100%;
+    height: 500px;
+  }
+
+  .crypto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Προσαρμόζει τις στήλες */
+    gap: 10px;
+  }
+  
+  .crypto-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 5px;
+  }
+  

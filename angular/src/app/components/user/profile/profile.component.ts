@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { UserService } from '../../services/api/user.service';
-import { KeycloakService } from '../../services/keycloak/keycloak.service';
-import { User } from '../../models/user.model';
+
 import { CommonModule, NgIf } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
+import { User } from '../../../models/user.model';
+import { KeycloakService } from '../../../services/keycloak/keycloak.service';
+import { UserService } from '../../../services/api/user.service';
 
 @Component({
   selector: 'app-profile',
