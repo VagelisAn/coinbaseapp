@@ -10,8 +10,9 @@ const baseUrl = `http://localhost:8081/api/users`;
 })
 export class UserService {
   constructor(private http: HttpClient) {} 
+
   getAll(): Observable<User[]> { 
-      return this.http.get<User[]>(`${baseUrl}/all`); 
+      return this.http.get<User[]>(`${baseUrl}`); 
   } 
   
   get(id: number): Observable<User> { 

@@ -8,6 +8,10 @@ import Material from '@primeng/themes/material';
 import { providePrimeNG } from 'primeng/config';
 import { KeycloakService } from './app/services/keycloak/keycloak.service';
 import { routes } from './app/app.routes';
+import { provideState, provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { userReducer } from './app/store/user/user.reducer';
+import { UserEffects } from './app/store/user/user.effects';
 
 const keycloakService = new KeycloakService();
 
@@ -17,23 +21,28 @@ keycloakService.initKeycloak().then((authenticated) => {
     
     bootstrapApplication(AppComponent, {
       providers: [
-        provideRouter(routes), 
-        provideHttpClient(),
-        provideAnimations(),
-        providePrimeNG({
-          theme: {
+    provideRouter(routes),
+    provideHttpClient(),
+    provideAnimations(),
+    provideStore(), // ✅ Provides the global store
+    provideState('users', userReducer), // ✅ Register the 'users' feature state
+    provideEffects(UserEffects), //
+    providePrimeNG({
+        theme: {
             preset: Material,
             options: {
-              prefix: 'p',
-              darkModeSelector: '.dark-theme'
+                prefix: 'p',
+                darkModeSelector: '.dark-theme'
             }
-          },
-          ripple: true
-        }),
-        MessageService,
-        // Εδώ προσθέτεις το instance του KeycloakService
-        { provide: KeycloakService, useValue: keycloakService }
-      ]
+        },
+        ripple: true
+    }),
+    MessageService,
+    // Εδώ προσθέτεις το instance του KeycloakService
+    { provide: KeycloakService, useValue: keycloakService },
+    provideStore(),
+    provideEffects()
+]
     }).catch(err => console.error('Bootstrap error:', err));
 
   } else {

@@ -7,7 +7,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputTextModule } from 'primeng/inputtext';
 import { UserService } from '../../../services/api/user.service';
 import { User } from '../../../models/user.model';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectAllUsers, selectUsersLoading } from '../../../store/user/user.selectors';
+import { loadUsers } from '../../../store/user/user.actions';
 
 @Component({
   selector: 'app-user-list',
@@ -17,28 +20,40 @@ import { RouterModule } from '@angular/router';
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent implements OnInit {
-  private userService = inject(UserService);
-  users = signal<User[]>([]);
-  isLoading = signal<boolean>(true);
 
+  private store = inject(Store);
+  
+  users$ = this.store.select(selectAllUsers);
+  loading$ = this.store.select(selectUsersLoading);
+
+  constructor() {
+     // ✅ Dispatch action to load users
+  }
 
   ngOnInit(): void {
-    this.loadUsers();
+   this.store.dispatch(loadUsers());
   }
+  // private userService = inject(UserService);
+  // users = signal<User[]>([]);
+  // isLoading = signal<boolean>(true);
+  
+  // ngOnInit(): void {
+  //   // this.loadUsers();
+  // }
 
-  loadUsers(): void {
-    this.userService.getAll().subscribe({
-      next: (data) => {
-        console.log(data)
-        this.users.set(data);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        console.error('Error fetching owners:', error);
-        this.isLoading.set(false);
-      }
-    });
-  }
+  // loadUsers(): void {
+  //   this.userService.getAll().subscribe({
+  //     next: (data) => {
+  //       console.log(data)
+  //       this.users.set(data);
+  //       this.isLoading.set(false);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching owners:', error);
+  //       this.isLoading.set(false);
+  //     }
+  //   });
+  // }
 
 
   openDeleteDialog(user: User) {

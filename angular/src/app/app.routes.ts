@@ -11,9 +11,10 @@ import { ChartComponent } from './components/user/chart/chart.component';
 import { ListComponent } from './components/user/list/list.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { PageComponent } from './components/admin/page/page.component';
+import { UserResolver } from './resolver/user/user.resolver';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
 
   { 
     path: 'admin',
@@ -21,7 +22,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['admin'])],
     children: [
       { path: 'page', component: PageComponent },
-      { path: 'users', component: UserListComponent }
+      { path: 'users', component: UserListComponent, resolve: { users: UserResolver } }
     ]
   },
 
@@ -38,5 +39,6 @@ export const routes: Routes = [
 
   { path: 'register', component: RegisterComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

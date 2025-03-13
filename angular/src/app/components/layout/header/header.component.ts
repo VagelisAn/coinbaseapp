@@ -52,7 +52,7 @@ export class HeaderComponent {
       ];
     } else {
       return [
-        { label: 'Home', routerLink: '/' }
+        { label: 'Home', routerLink: 'home' }
       ]; // ✅ Default option in case no role matches
     }
   }

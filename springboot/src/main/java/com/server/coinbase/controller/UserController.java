@@ -27,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @GetMapping("/keycloak/{id}")
+    @GetMapping("/keycloak/{id}")csd 
     public ResponseEntity<UserDTO> getUserByKeycloakId(@PathVariable String id) {
         return ResponseEntity.ok(userService.getUserByKeycloakId(id));
     }
