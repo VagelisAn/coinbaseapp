@@ -18,31 +18,31 @@ const keycloakService = new KeycloakService();
 keycloakService.initKeycloak().then((authenticated) => {
   if (authenticated) {
     console.log('✅ Keycloak authenticated successfully');
-    
+
     bootstrapApplication(AppComponent, {
       providers: [
-    provideRouter(routes),
-    provideHttpClient(),
-    provideAnimations(),
-    provideStore(), // ✅ Provides the global store
-    provideState('users', userReducer), // ✅ Register the 'users' feature state
-    provideEffects(UserEffects), //
-    providePrimeNG({
-        theme: {
+        provideRouter(routes),
+        provideHttpClient(),
+        provideAnimations(),
+        provideStore(), // Provides the global store
+        provideState('users', userReducer), // Register the 'users' feature state
+        provideEffects(UserEffects), //Register Effects for user
+        providePrimeNG({
+          theme: {
             preset: Material,
             options: {
-                prefix: 'p',
-                darkModeSelector: '.dark-theme'
+              prefix: 'p',
+              darkModeSelector: '.dark-theme'
             }
-        },
-        ripple: true
-    }),
-    MessageService,
-    // Εδώ προσθέτεις το instance του KeycloakService
-    { provide: KeycloakService, useValue: keycloakService },
-    provideStore(),
-    provideEffects()
-]
+          },
+          ripple: true
+        }),
+        MessageService,
+        // Εδώ προσθέτεις το instance του KeycloakService
+        { provide: KeycloakService, useValue: keycloakService },
+        provideStore(),
+        provideEffects()
+      ]
     }).catch(err => console.error('Bootstrap error:', err));
 
   } else {

@@ -5,7 +5,7 @@ import { catchError, exhaustMap, of, map, mergeMap, tap } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 @Injectable({
-  providedIn: 'root' // ✅ Make sure it's provided in root
+  providedIn: 'root'
 })
 export class UserEffects {
 

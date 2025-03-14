@@ -23,13 +23,12 @@ export class ProfileComponent {
   constructor(
     private keycloakService: KeycloakService,
     private userServide: UserService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const userId = this.keycloakService.getUserId();
     console.log("key cloack user id ", userId);
     if (userId) {
-      // Παράδειγμα URL, αντικατάστησέ το με το δικό σου endpoint
       this.userServide.getByKeycloakId(userId).subscribe({
         next: (data) => {
           this.profile = data;
@@ -44,12 +43,12 @@ export class ProfileComponent {
 
   editProfile() {
     this.editMode = true;
-    this.editedProfile = { ...this.profile }; 
-    }
+    this.editedProfile = { ...this.profile };
+  }
 
   saveProfile() {
-    this.profile = { ...this.editedProfile }; 
+    this.profile = { ...this.editedProfile };
     this.editMode = false;
-    this.userServide.update(this.profile.id! ,this.profile);
+    this.userServide.update(this.profile.id!, this.profile);
   }
 }

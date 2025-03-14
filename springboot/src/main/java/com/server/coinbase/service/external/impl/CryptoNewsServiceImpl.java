@@ -35,7 +35,7 @@ public class CryptoNewsServiceImpl implements CryptoNewsService {
 
     @Cacheable(value = "cryptoNews", key = "#params.toString()")
     public CryptoNewsResponseDTO getCryptoNews(Map<String, String> params) {
-        // Build the dynamic URL with query parameters
+
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .queryParam("auth_token", apiToken);
 
@@ -49,42 +49,22 @@ public class CryptoNewsServiceImpl implements CryptoNewsService {
 
         System.out.println("Request URL: " + uri);
 
-        // Perform the request
         String response = webClient.get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class)
-                .block(); // Blocking call to get the result synchronously
+                .block();
 
         log.info("response {}" , response);
-        String jsonPayload = null;
-        CryptoNewsResponseDTO cryptoNewsResponseDTO = null;
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            cryptoNewsResponseDTO = objectMapper.readValue(response, CryptoNewsResponseDTO.class);
 
-            jsonPayload = objectMapper.writeValueAsString(cryptoNewsResponseDTO);
-
-            log.info("jsonPayload {}" , jsonPayload);
-
-            List<CryptoNewsDTO> newsList = cryptoNewsResponseDTO.getResults();
-            for (CryptoNewsDTO news : newsList) {
-                System.out.println("Title: " + news.getTitle());
-                System.out.println("Published At: " + news.getPublished_at());
-                System.out.println("URL: " + news.getUrl());
-                if (news.getCurrencies() != null) {
-                    for (CurrencyDTO currencyDTO : news.getCurrencies()) {
-                        System.out.println("Currency: " + currencyDTO.getTitle() + " (Code: " + currencyDTO.getCode() + ")");
-                        System.out.println("Currency URL: " + currencyDTO.getUrl());
-                    }
-                }
-
-                System.out.println("=========================================");
-            }
+            return objectMapper.readValue(response, CryptoNewsResponseDTO.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return cryptoNewsResponseDTO;
+        return null;
     }
 }
 

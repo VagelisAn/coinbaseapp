@@ -1,55 +1,111 @@
-
 <h2>Cryptocurrency Market</h2>
+<p-card header="Select Currency and Sort Order">
+  <div class="card-body">
+    <!-- Currency Dropdown -->
+    <p-dropdown
+      [options]="currencies"
+      [(ngModel)]="selectedCurrency"
+      placeholder="Select Currency"
+      (onChange)="onCurrencyChange($event)"
+    >
+    </p-dropdown>
 
-<p-table #dt [value]="cryptos" [loading]="isLoading" [rows]="25" [rowsPerPageOptions]="[25, 50, 80]"
-[paginator]="true" [globalFilterFields]="['id', 'name', 'symbol', 'market_cap']"
-[tableStyle]="{'min-width': '50rem'}" [rowHover]="true" dataKey="id"
-currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
-sortField="lastname" [sortOrder]="1" emptyMessage="No records found">
-<ng-template pTemplate="caption">
+    <!-- Market Cap Sorting Dropdown -->
+    <p-dropdown
+      [options]="sortOrders"
+      [(ngModel)]="selectedSortOrder"
+      placeholder="Select Sort Order"
+      (onChange)="onSortOrderChange($event)"
+    >
+    </p-dropdown>
+  </div>
+</p-card>
+
+<p-table
+  #dt
+  [value]="cryptos"
+  [loading]="isLoading"
+  [rows]="15"
+  [rowsPerPageOptions]="[15, 30, 45]"
+  [paginator]="true"
+  [globalFilterFields]="['id', 'name', 'symbol', 'market_cap']"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+  sortField="lastname"
+  [sortOrder]="1"
+  emptyMessage="No records found"
+>
+  <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
-        <ng-container *ngIf="cryptos">
-            Totally exist {{ cryptos.length || 0 }} {{ (cryptos.length || 0) == 1 ? 'row' : 'rows' }}
-          </ng-container>
-        <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Search..." />
-        </span>
+      <ng-container *ngIf="cryptos">
+        Totally exist {{ cryptos.length || 0 }}
+        {{ (cryptos.length || 0) == 1 ? "row" : "rows" }}
+      </ng-container>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Search..."
+        />
+      </span>
     </div>
-</ng-template>
-<ng-template pTemplate="header">
+  </ng-template>
+  <ng-template pTemplate="header">
     <tr>
       <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-      <th pSortableColumn="symbol">Symbol <p-sortIcon field="symbol"></p-sortIcon></th>
-      <th pSortableColumn="current_price">Current Price <p-sortIcon field="current_price"></p-sortIcon></th>
-      <th pSortableColumn="market_cap">Market Cap <p-sortIcon field="market_cap"></p-sortIcon></th>
-      <th pSortableColumn="total_volume">Total Volume <p-sortIcon field="total_volume"></p-sortIcon></th>
-      <th pSortableColumn="high_24h">High 24h <p-sortIcon field="high_24h"></p-sortIcon></th>
-      <th pSortableColumn="low_24h">Low 24h <p-sortIcon field="low_24h"></p-sortIcon></th>
-      <th pSortableColumn="price_change_percentage_24h">Price Change % 24h <p-sortIcon field="price_change_percentage_24h"></p-sortIcon></th>
+      <th pSortableColumn="name">
+        Name <p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="symbol">
+        Symbol <p-sortIcon field="symbol"></p-sortIcon>
+      </th>
+      <th pSortableColumn="current_price">
+        Current Price <p-sortIcon field="current_price"></p-sortIcon>
+      </th>
+      <th pSortableColumn="market_cap">
+        Market Cap <p-sortIcon field="market_cap"></p-sortIcon>
+      </th>
+      <th pSortableColumn="total_volume">
+        Total Volume <p-sortIcon field="total_volume"></p-sortIcon>
+      </th>
+      <th pSortableColumn="high_24h">
+        High 24h <p-sortIcon field="high_24h"></p-sortIcon>
+      </th>
+      <th pSortableColumn="low_24h">
+        Low 24h <p-sortIcon field="low_24h"></p-sortIcon>
+      </th>
+      <th pSortableColumn="price_change_percentage_24h">
+        Price Change % 24h
+        <p-sortIcon field="price_change_percentage_24h"></p-sortIcon>
+      </th>
     </tr>
-</ng-template>
-<ng-template pTemplate="body" let-crypto>
+  </ng-template>
+  <ng-template pTemplate="body" let-crypto>
     <tr>
-        <td>{{ crypto.id }}</td>
-        <td>{{ crypto.name }}</td>
-        <td>{{ crypto.symbol }}</td>
-        <td>{{ crypto.current_price }}</td>
-        <td>{{ crypto.market_cap }}</td>
-        <td>{{ crypto.total_volume }}</td>
-        <td>{{ crypto.high_24h }}</td>
-        <td>{{ crypto.low_24h }}</td>
-        <td>{{ crypto.price_change_percentage_24h }}</td>
+      <td>{{ crypto.id }}</td>
+      <td>{{ crypto.name }}</td>
+      <td>{{ crypto.symbol }}</td>
+      <td>{{ crypto.current_price }}</td>
+      <td>{{ crypto.market_cap }}</td>
+      <td>{{ crypto.total_volume }}</td>
+      <td>{{ crypto.high_24h }}</td>
+      <td>{{ crypto.low_24h }}</td>
+      <td>{{ crypto.price_change_percentage_24h }}</td>
     </tr>
-</ng-template>
-<ng-template pTemplate="emptymessage">
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
     <tr>
-        <td colspan="2" class="p-text-center">No records</td>
+      <td colspan="2" class="p-text-center">No records</td>
     </tr>
-</ng-template>
-<ng-template pTemplate="summary">
-    <div class="flex align-items-center justify-content-between">Created by Andreadis.</div>
-</ng-template>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="flex align-items-center justify-content-between">
+      Created by Andreadis.
+    </div>
+  </ng-template>
 </p-table>

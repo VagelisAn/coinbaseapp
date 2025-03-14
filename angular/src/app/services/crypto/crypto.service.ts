@@ -6,21 +6,13 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class CryptoService {
-  private apiUrl = 'https://api.coingecko.com/api/v3/coins/markets';
+  private apiUrl = 'http://localhost:8081/api/crypto/coin/gecko';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getCryptos(page: number = 1, perPage: number = 10): Observable<Crypto[]> {
+  getAllCryptos(selectedCurrency: string, selectedSortOrder: string): Observable<Crypto[]> {
     return this.http
-      .get<Crypto[]>(`${this.apiUrl}?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}`)
-      .pipe(
-        catchError(this.handleError) // Handle errors
-      );
-  }
-
-  getAllCryptos(): Observable<Crypto[]> {
-    return this.http
-      .get<Crypto[]>(`${this.apiUrl}?vs_currency=usd&order=market_`)
+      .get<Crypto[]>(`${this.apiUrl}?vs_currency=${selectedCurrency}&order=${selectedSortOrder}`)
       .pipe(
         catchError(this.handleError) // Handle errors
       );

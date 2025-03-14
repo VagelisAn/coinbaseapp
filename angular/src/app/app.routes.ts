@@ -33,7 +33,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['user'])],
     children: [
       { path: 'chart', component: ChartComponent },
-      { path: 'list', component: ListComponent },
+      { path: 'market', component: ListComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'news', component: NewsComponent }
     ]

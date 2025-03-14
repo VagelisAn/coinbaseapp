@@ -1,11 +1,13 @@
 package com.server.coinbase.controller;
 
+import com.server.coinbase.dto.CryptoResponseDTO;
 import com.server.coinbase.service.external.CryptoService;
 import com.server.coinbase.service.external.impl.CryptoServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,5 +20,10 @@ public class CryptoController {
     @GetMapping("/{endpoint}")
     public String getCoinbaseData(@PathVariable String endpoint, @RequestParam Map<String, String> params) {
         return cryptoService.getCoinbaseData(endpoint, params);
+    }
+
+    @GetMapping("/coin/gecko")
+    public List<CryptoResponseDTO> getCoinGeckoData(@RequestParam Map<String, String> params) {
+        return cryptoService.getCoinGeckoData(params);
     }
 }

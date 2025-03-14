@@ -22,21 +22,19 @@ import { loadUsers } from '../../../store/user/user.actions';
 export class UserListComponent implements OnInit {
 
   private store = inject(Store);
-  
+
   users$ = this.store.select(selectAllUsers);
   loading$ = this.store.select(selectUsersLoading);
 
-  constructor() {
-     // ✅ Dispatch action to load users
-  }
+  constructor() { }
 
   ngOnInit(): void {
-   this.store.dispatch(loadUsers());
+    this.store.dispatch(loadUsers());
   }
   // private userService = inject(UserService);
   // users = signal<User[]>([]);
   // isLoading = signal<boolean>(true);
-  
+
   // ngOnInit(): void {
   //   // this.loadUsers();
   // }
@@ -57,44 +55,44 @@ export class UserListComponent implements OnInit {
 
 
   openDeleteDialog(user: User) {
-  //   if (owner.id) {
-  //     this.deleteDialogService.openDeleteDialog(
-  //       generateMessage(DELETE_MESSAGE,
-  //         `${owner.firstname} ${owner.lastname}`
-  //       ),
-  //       DELETE_TITLE,
-  //       deleteOwner({ id: Number(owner.id) }),
-  //       generateMessage(
-  //         DETAIL_SUCCESS_TOASTER,
-  //         ` διαγραφή του ${owner.firstname} ${owner.lastname}`
-  //       ),
-  //       generateMessage(
-  //         DETAIL_ERROR_TOASTER,
-  //         ` διαγραφή του ${owner.firstname} ${owner.lastname}`
-  //       ),
-  //       DELETE_REJECT_MESSAGE,
-  //       DELETE_CANCEL_MESSAGE,
-  //       this.success$,
-  //       this.error$
-  //     );
-  //   }
+    //   if (owner.id) {
+    //     this.deleteDialogService.openDeleteDialog(
+    //       generateMessage(DELETE_MESSAGE,
+    //         `${owner.firstname} ${owner.lastname}`
+    //       ),
+    //       DELETE_TITLE,
+    //       deleteOwner({ id: Number(owner.id) }),
+    //       generateMessage(
+    //         DETAIL_SUCCESS_TOASTER,
+    //         ` διαγραφή του ${owner.firstname} ${owner.lastname}`
+    //       ),
+    //       generateMessage(
+    //         DETAIL_ERROR_TOASTER,
+    //         ` διαγραφή του ${owner.firstname} ${owner.lastname}`
+    //       ),
+    //       DELETE_REJECT_MESSAGE,
+    //       DELETE_CANCEL_MESSAGE,
+    //       this.success$,
+    //       this.error$
+    //     );
+    //   }
   }
 
   addOwnerDialog() {
-  //   this.visibleOwnerDialog = this.visibleOwnerDialog === false ? true : false;
+    //   this.visibleOwnerDialog = this.visibleOwnerDialog === false ? true : false;
   }
-  
+
   visibleFormOwnerDialog(event: { visible: boolean }) {
-  //   this.visibleOwnerDialog = event.visible;
+    //   this.visibleOwnerDialog = event.visible;
   }
 
   async exportToPDF() {
-  //   const pdfBlob = await this.pdfService.generateOwnerPdf(this.owners);
-  //   const url = URL.createObjectURL(pdfBlob);
-  //   const link = document.createElement('a');
-  //   link.href = url;
-  //   link.download = 'owners-list.pdf';
-  //   link.click();
-  //   URL.revokeObjectURL(url); // Clean
+    //   const pdfBlob = await this.pdfService.generateOwnerPdf(this.owners);
+    //   const url = URL.createObjectURL(pdfBlob);
+    //   const link = document.createElement('a');
+    //   link.href = url;
+    //   link.download = 'owners-list.pdf';
+    //   link.click();
+    //   URL.revokeObjectURL(url); // Clean
   }
 }

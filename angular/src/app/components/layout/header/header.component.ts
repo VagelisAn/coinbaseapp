@@ -47,14 +47,14 @@ export class HeaderComponent {
       return [
         { label: 'User Home', routerLink: '/user' },
         { label: 'Profile', routerLink: '/user/profile' },
-        { label: 'List', routerLink: '/user/list' },
+        { label: 'Market Cap', routerLink: '/user/market' },
         { label: 'Chart', routerLink: '/user/chart' },
         { label: 'News', routerLink: '/user/news' }
       ];
     } else {
       return [
         { label: 'Home', routerLink: 'home' }
-      ]; // ✅ Default option in case no role matches
+      ]; // Default option in case no role matches
     }
   }
 }

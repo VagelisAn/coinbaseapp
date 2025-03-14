@@ -1,9 +1,9 @@
 import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgxEchartsModule,  provideEchartsCore} from 'ngx-echarts';
+import { NgxEchartsModule, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { EChartsOption } from 'echarts';
-import { TitleComponent, TooltipComponent } from 'echarts/components'; 
+import { TitleComponent, TooltipComponent } from 'echarts/components';
 import { Crypto } from '../../../models/crypto.model';
 import { CryptoService } from '../../../services/crypto/crypto.service';
 import { Subscription } from 'rxjs';
@@ -25,7 +25,7 @@ echarts.use([TooltipComponent]);
   imports: [CommonModule, FormsModule, CheckboxModule, ButtonModule, DropdownModule, NgxEchartsModule, NgFor],
   providers: [
     provideEchartsCore({ echarts }),
-  
+
   ],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.css'
@@ -39,7 +39,7 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   chartOptions: EChartsOption = {};
 
-  private subscription!: Subscription; 
+  private subscription!: Subscription;
 
   chartTypes = [
     { label: 'Pie Chart', value: 'pie' },
@@ -49,20 +49,20 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   pdfHeaders = ['Name', 'Symbol', 'Price (USD)', 'Market Cap (USD)'];
 
-  constructor(private cryptoService: CryptoService) {}
+  constructor(private cryptoService: CryptoService) { }
 
-  ngOnInit(): void {
-    this.subscription = this.cryptoService.getAllCryptos().subscribe({
+  ngOnInit(): void { // add a store for crypto 
+    this.subscription = this.cryptoService.getAllCryptos('usd', 'market_cap_desc').subscribe({
       next: (data: any[]) => {
         console.log(data)
-        this.cryptos = data; // ✅ Assign the data to the variable
+        this.cryptos = data;
       },
       error: (err) => console.error('Error fetching cryptos:', err),
     });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe(); // ✅ Prevent memory leaks
+    this.subscription.unsubscribe(); // Prevent memory leaks
   }
 
   isSelected(cryptoId: string): boolean {
@@ -72,7 +72,7 @@ export class ChartComponent implements OnInit, OnDestroy {
   onCheckboxChange(event: any, cryptoId: string) {
     if (event.checked) {
       if (this.selectedCryptos.size >= 8) {
-          return;
+        return;
       } else if (this.selectedCryptos.size == 7) {
         // this.showMessage('warn','Selection Limit','You can select up to 8 cryptocurrencies. Last selection!');
         this.selectedCryptos.add(cryptoId);
@@ -84,7 +84,7 @@ export class ChartComponent implements OnInit, OnDestroy {
       this.selectedCryptos.delete(cryptoId);
     }
 
-  
+
   }
 
   onChartTypeChange() {
@@ -97,18 +97,20 @@ export class ChartComponent implements OnInit, OnDestroy {
       // this.showMessage('error', 'Error', 'Please select at least one cryptocurrency!');
       return;
     }
-   
+
     this.showCryptos = this.exportSelectedCryptos(this.selectedCryptos);
-   
+
     if (this.selectedChartType === 'line') {
       this.chartOptions = {
-        tooltip: {  trigger: 'item',
+        tooltip: {
+          trigger: 'item',
           formatter: (params: any) => {
             return `<b>${params.name}</b><br/>
                       Symbol: ${params.data.symbol.toUpperCase()}<br/>
                       Market Cap: $${params.data.market_cap.toLocaleString()}<br/>
                       Current Price: $${params.data.current_price.toLocaleString()}`;
-          }, },
+          },
+        },
         xAxis: {
           type: 'category',
           data: this.showCryptos.map(c => c.name)
@@ -147,13 +149,15 @@ export class ChartComponent implements OnInit, OnDestroy {
       };
     } else if (this.selectedChartType === 'bar') {
       this.chartOptions = {
-        tooltip: {  trigger: 'item',
+        tooltip: {
+          trigger: 'item',
           formatter: (params: any) => {
             return `<b>${params.name}</b><br/>
                       Symbol: ${params.data.symbol.toUpperCase()}<br/>
                       Market Cap: $${params.data.market_cap.toLocaleString()}<br/>
                       Current Price: $${params.data.current_price.toLocaleString()}`;
-          }, },
+          },
+        },
         xAxis: {
           type: 'category',
           data: this.showCryptos.map(c => c.name)
@@ -191,14 +195,15 @@ export class ChartComponent implements OnInit, OnDestroy {
       };
     } else if (this.selectedChartType === 'pie') {
       this.chartOptions = {
-        tooltip: {  trigger: 'item',
+        tooltip: {
+          trigger: 'item',
           formatter: (params: any) => {
             return `<b>${params.name}</b><br/>
                       Symbol: ${params.data.symbol.toUpperCase()}<br/>
                       Market Cap: $${params.data.market_cap.toLocaleString()}<br/>
                       Current Price: $${params.data.current_price.toLocaleString()}`;
           },
-         },
+        },
         series: [{
           name: 'Cryptos',
           type: 'pie',
@@ -223,17 +228,17 @@ export class ChartComponent implements OnInit, OnDestroy {
       crypto.current_price.toFixed(2),
       crypto.market_cap.toLocaleString()
     ]);
-   PdfUtil.exportToPdf("Exprot data for Crypto", this.pdfHeaders, data, "Export.pdf")
+    PdfUtil.exportToPdf("Exprot data for Crypto", this.pdfHeaders, data, "Export.pdf")
   }
 
 
-  exportSelectedCryptos(selectedCryptos: Set<string>):Crypto[] {
+  exportSelectedCryptos(selectedCryptos: Set<string>): Crypto[] {
     this.showCryptos = [];
 
     this.selectedCryptos.forEach((crypt) => {
       const filteredCryptos = this.cryptos.filter((c) => c.id === crypt);
       this.showCryptos.push(...filteredCryptos);
     });
-    return  this.showCryptos;
+    return this.showCryptos;
   }
 }
