@@ -20,7 +20,7 @@ export class HeaderComponent {
   menuVisible = true;
   isAuthenticated = this.keycloakService.isAuthenticated();
   username = this.keycloakService.getUserName();
-  
+
   menuItems: MenuItem[] = [];
   sideMenu: MenuItem[] = [];
 
@@ -48,7 +48,8 @@ export class HeaderComponent {
         { label: 'User Home', routerLink: '/user' },
         { label: 'Profile', routerLink: '/user/profile' },
         { label: 'List', routerLink: '/user/list' },
-        { label: 'Chart', routerLink: '/user/chart' }
+        { label: 'Chart', routerLink: '/user/chart' },
+        { label: 'News', routerLink: '/user/news' }
       ];
     } else {
       return [

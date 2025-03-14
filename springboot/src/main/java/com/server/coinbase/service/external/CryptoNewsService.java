@@ -1,7 +1,9 @@
 package com.server.coinbase.service.external;
 
+import com.server.coinbase.dto.CryptoNewsResponseDTO;
+
 import java.util.Map;
 
 public interface CryptoNewsService {
-    String getCryptoNews(Map<String, String> params);
+    CryptoNewsResponseDTO getCryptoNews(Map<String, String> params);
 }

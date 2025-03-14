@@ -17,11 +17,22 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<java.target>17</java.target>
+		<java.source>17</java.source>
+		<mave.compile.version>3.11.0</mave.compile.version>
 		<org.mapstruct.version>1.6.2</org.mapstruct.version>
 		<org.projectlombok.version>1.18.34</org.projectlombok.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<modelmapper.version>3.2.1</modelmapper.version>
+		<jackson-databind.version>2.18.2</jackson-databind.version>
+		<jackson-core.version>2.18.2</jackson-core.version>
+		<jackson-anotations.version>2.18.2</jackson-anotations.version>
+		<keycloak-admin-client.version>24.0.5</keycloak-admin-client.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
+		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+		<keycloak-spring-boot-starter.version>24.0.5</keycloak-spring-boot-starter.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -34,6 +45,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -71,13 +88,13 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.5.0</version>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.1.0</version> <!-- Or the latest version available -->
+			<version>${jakarta.servlet-api.version}</version> <!-- Or the latest version available -->
 <!--			<scope>provided</scope>-->
 		</dependency>
 
@@ -96,7 +113,7 @@
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-spring-boot-starter</artifactId>
-			<version>23.0.7</version>
+			<version>${keycloak-spring-boot-starter.version}</version>
 		</dependency>
 
 		<dependency>
@@ -107,7 +124,7 @@
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-admin-client</artifactId>
-			<version>23.0.7</version> <!-- Η τελευταία έκδοση -->
+			<version>${keycloak-admin-client.version}</version> <!-- Η τελευταία έκδοση -->
 		</dependency>
 
 		<dependency>
@@ -122,6 +139,22 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-databind.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson-core.version}</version>  <!-- Same version as jackson-databind -->
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson-anotations.version}</version>  <!-- Same version as jackson-databind -->
 		</dependency>
 
 	</dependencies>
@@ -144,10 +177,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>${mave.compile.version}</version>
 				<configuration>
-					<source>17</source>
-					<target>17</target>
+					<source>${java.source}</source>
+					<target>${java.target}}</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.mapstruct</groupId>

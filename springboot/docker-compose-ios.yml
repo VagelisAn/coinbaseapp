@@ -1,0 +1,72 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-keycloack
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - /Users/bangelesandreades/Desktop/coinbase-app/postgresql_data:/var/lib/postgresql/data
+    env_file:
+      - .env.postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: coinbase-keycloak
+    command: [ "start-dev", "--import-realm" ]
+    env_file:
+      - .env.keycloak
+    volumes:
+      - ./keycloak-realm.json:/opt/keycloak/data/import/realm.json
+      - ./keycloak-export:/opt/keycloak/data/export
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+  db:
+    image: postgres:15
+    container_name: coinbase-db
+    restart: always
+    ports:
+      - "5433:5432"
+    env_file:
+      - .env.postgresql.app.db
+    volumes:
+      #      - ./init-scripts:/docker-entrypoint-initdb.d
+      - /Users/bangelesandreades/Desktop/coinbase-app/coinbase-db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+  graphite:
+    image: graphiteapp/graphite-statsd:latest
+    container_name: graphite
+    ports:
+      - "8083:80" # For the Graphite web UI
+      - "2003:2003" # For Graphite's plaintext protocol (used to send metrics)
+      - "8125:8125/udp" # For StatsD (optional, if you want to send metrics via StatsD)
+    volumes:
+      - /Users/bangelesandreades/Desktop/coinbase-app/graphite-data:/opt/graphite/storage
+    environment:
+      - GRAPHITE_STORAGE_DIR=/opt/graphite/storage
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000" # Grafana UI
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - /Users/bangelesandreades/Desktop/coinbase-app/grafana-data:/var/lib/grafana
+    depends_on:
+      - graphite
+
+## sudo lsof -i :5433 or sudo netstat -an | grep 5433
+## sudo kill -9 <PID>
+## sudo docker-compose -f docker-compose-ios.yml up

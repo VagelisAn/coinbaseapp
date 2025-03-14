@@ -12,11 +12,12 @@ import { ListComponent } from './components/user/list/list.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { PageComponent } from './components/admin/page/page.component';
 import { UserResolver } from './resolver/user/user.resolver';
+import { NewsComponent } from './components/user/news/news.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
 
-  { 
+  {
     path: 'admin',
     component: AdminComponent,
     canActivate: [authGuard, roleGuard(['admin'])],
@@ -26,14 +27,15 @@ export const routes: Routes = [
     ]
   },
 
-  { 
+  {
     path: 'user',
     component: UserComponent,
     canActivate: [authGuard, roleGuard(['user'])],
     children: [
       { path: 'chart', component: ChartComponent },
       { path: 'list', component: ListComponent },
-      { path: 'profile', component: ProfileComponent }
+      { path: 'profile', component: ProfileComponent },
+      { path: 'news', component: NewsComponent }
     ]
   },
 

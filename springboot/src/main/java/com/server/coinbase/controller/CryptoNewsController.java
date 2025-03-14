@@ -1,5 +1,6 @@
 package com.server.coinbase.controller;
 
+import com.server.coinbase.dto.CryptoNewsResponseDTO;
 import com.server.coinbase.service.external.CryptoNewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ public class CryptoNewsController {
 
     private final CryptoNewsService newsService;
 
-    @GetMapping("/news")
-    public String getNews(@RequestParam Map<String, String> params) {
+    @GetMapping
+    public CryptoNewsResponseDTO getNews(@RequestParam Map<String, String> params) {
         return newsService.getCryptoNews(params);
     }
 }
